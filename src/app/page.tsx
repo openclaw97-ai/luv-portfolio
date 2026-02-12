@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Lab01Card } from "@/components/Lab01Card";
+import { Contact } from "@/components/Contact";
 
 export default function Home() {
   return (
@@ -31,6 +32,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <Contact />
       <div className="w-full max-w-7xl px-6 pb-24 sm:px-8 lg:px-12">
         {/* Further sections will go here */}
       </div>
