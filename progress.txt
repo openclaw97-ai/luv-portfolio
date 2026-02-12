@@ -33,3 +33,23 @@ Started: Wednesday, February 11th, 2026 — 9:12 PM
 - Added unit tests for Hero component in src/__tests__/hero.test.ts.
 - **Learnings:** Framer Motion variants in TypeScript may require 'as const' to ensure 'type' properties are correctly inferred as literals (e.g., "spring").
 ---
+
+---
+## 2026-02-11 21:45 - US-004: Build About Section with Bio and Photo Integration
+- Implemented About component with engineering aesthetic (technical grid, corner accents).
+- Added Luv's bio text and high-quality photo placeholder using Next.js Image component.
+- Integrated About section into the main page.
+- Added smoke tests for About component in src/__tests__/about.test.ts.
+- Verified build with typecheck and node:test suite.
+- **Learnings:** Next.js Image grayscale/brightness filters in Tailwind 4 work smoothly for consistent technical visual style.
+---
+
+---
+## 2026-02-11 21:53 - US-005: Create Lab-01 Project Showcase Card
+- Developed a specialized showcase component for 'Lab-01' using a technical, enterprise-grade aesthetic.
+- Included project metadata, technical tags (AI, Automation, Engineering), and a hover scanning line effect.
+- Integrated the card into a new 'Selected Systems' section on the main page.
+- Added static analysis smoke tests in src/__tests__/lab01-card.test.ts.
+- Verified all tests pass and typecheck is clean.
+- **Learnings:** Using absolute positioning with overflow-hidden on cards allows for creative background scanning/radar effects without breaking layout flows.
+---
