@@ -18,3 +18,18 @@ Started: Wednesday, February 11th, 2026 — 9:12 PM
 - Added typecheck and test scripts to package.json.
 - **Learnings:** Next.js 15.5+ default scaffold uses Tailwind 4. Node 22 supports stripping types for tests.
 ---
+## 2026-02-11 21:35 - US-002: Setup Subtle Dark Engineering Theme and Global Layout
+- Defined 'subtle dark engineering' theme in globals.css using Tailwind 4 `@theme`.
+- Implemented responsive technical grid background pattern in CSS.
+- Updated RootLayout with dark mode, background layers, and engineering metadata.
+- Added theme and layout unit tests in src/__tests__/theme.test.ts.
+- **Learnings:** Tailwind 4 uses CSS variables for theme configuration, moving away from tailwind.config.ts by default.
+---
+
+---
+## 2026-02-11 21:23 - US-003: Implement Hero Section with Headline and Animations
+- Created Hero component with Framer Motion staggered animations.
+- Updated main page to include the Hero section.
+- Added unit tests for Hero component in src/__tests__/hero.test.ts.
+- **Learnings:** Framer Motion variants in TypeScript may require 'as const' to ensure 'type' properties are correctly inferred as literals (e.g., "spring").
+---
