@@ -25,7 +25,7 @@ export const About = () => {
               <div className="absolute bottom-4 right-4 w-6 h-6 border-b border-r border-accent/20 z-20 group-hover:border-accent/50 transition-colors" />
               
               <Image
-                src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1000&auto=format&fit=crop" 
+                src="/profile.png" 
                 alt="Luv - Autonomous Systems Engineer"
                 fill
                 className="object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 contrast-125"

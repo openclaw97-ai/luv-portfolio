@@ -14,9 +14,9 @@ export const Contact = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
           
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
-            <div className="flex-1 space-y-6">
+            <div className="flex-1 space-y-6 text-center md:text-left">
               <div className="space-y-4">
-                <div className="flex items-center gap-3 text-accent-muted">
+                <div className="flex items-center justify-center md:justify-start gap-3 text-accent-muted">
                   <Terminal className="w-4 h-4 text-accent/50" />
                   <span className="text-xs font-mono uppercase tracking-[0.3em]">Communication_Bridge</span>
                 </div>
@@ -28,9 +28,9 @@ export const Contact = () => {
                 </p>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-4 flex justify-center md:justify-start">
                 <a 
-                  href="https://t.me/luvkushwaha" 
+                  href="https://t.me/lovie97" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 bg-accent text-background px-8 py-4 font-mono font-bold text-sm tracking-widest hover:bg-accent-muted transition-all duration-300 group shadow-lg shadow-accent/10"
