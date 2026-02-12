@@ -53,3 +53,18 @@ Started: Wednesday, February 11th, 2026 — 9:12 PM
 - Verified all tests pass and typecheck is clean.
 - **Learnings:** Using absolute positioning with overflow-hidden on cards allows for creative background scanning/radar effects without breaking layout flows.
 ---
+## 2026-02-11 22:15 - US-006: Integrate Telegram Contact Ping
+- Created Contact component with 'Communication_Bridge' technical aesthetic.
+- Implemented a high-visibility Telegram connect button linking to t.me/luvkushwaha.
+- Added decorative engineering elements including a rotating status ring and corner blur effects.
+- Added unit smoke tests in src/__tests__/contact.test.ts.
+- Integrated the section at the bottom of the landing page.
+- **Learnings:** Using CSS animations for status indicators (e.g., rotating rings) provides a 'living system' feel with minimal performance overhead.
+---
+## 2026-02-11 22:30 - US-007: Responsive Review and Final Build Optimization
+- Conducted full-site responsive audit, verifying mobile/tablet/desktop breakpoints.
+- Verified Next.js Image optimization settings for responsive environments.
+- Performed successful production build and typecheck.
+- Added final polish test suite in src/__tests__/polish.test.ts.
+- **Learnings:** Next.js First Load JS stays extremely low (~150kb) even with several Framer Motion components when leveraging RSC and proper hydration patterns.
+---
