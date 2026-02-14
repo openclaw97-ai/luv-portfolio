@@ -47,7 +47,7 @@ export default function YouTubeDownloader() {
           className="mb-12"
         >
           <Link
-            href="/tools"
+            href="/tools.html"
             className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-accent-muted hover:text-accent transition-colors mb-6"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Tools

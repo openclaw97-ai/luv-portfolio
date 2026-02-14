@@ -3,15 +3,15 @@
 import { motion } from "framer-motion";
 
 export const Hero = () => {
-  const words = "Building the Future of Autonomous Systems".split(" ");
-
+  const words = "Turning Complex Problems Into Elegant Solutions".split(" ");
+  
   const container = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
-      transition: { 
-        staggerChildren: 0.1, 
-        delayChildren: 0.2 * i 
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.15 * i,
       },
     }),
   };
@@ -50,13 +50,9 @@ export const Hero = () => {
         animate="visible"
         className="max-w-4xl"
       >
-        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
           {words.map((word, index) => (
-            <motion.span
-              variants={child}
-              key={index}
-              className="inline-block mr-3"
-            >
+            <motion.span variants={child} key={index} className="inline-block mr-3">
               {word}
             </motion.span>
           ))}
@@ -64,27 +60,34 @@ export const Hero = () => {
         
         <motion.p
           variants={child}
-          className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-accent-muted sm:text-xl"
+          className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-accent-muted sm:text-xl"
         >
-          Pioneering next-generation intelligence through robust engineering
-          and autonomous architecture.
+          I build web applications and automation systems that save you time, cut costs, 
+          and let you focus on what actually matters—growing your business.
+        </motion.p>
+        
+        <motion.p
+          variants={child}
+          className="mx-auto mt-4 max-w-xl text-sm text-accent-muted/70"
+        >
+          From sleek customer-facing apps to behind-the-scenes tools that make your team's life easier.
         </motion.p>
 
         <motion.div
           variants={child}
-          className="mt-10 flex items-center justify-center gap-x-6"
+          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <a
-            href="#projects"
-            className="rounded-md bg-accent px-6 py-3 text-sm font-semibold text-background shadow-xs hover:bg-accent/90 transition-all"
+            href="/#projects"
+            className="rounded-md bg-accent px-8 py-4 text-sm font-semibold text-background shadow-xs hover:bg-accent/90 transition-all w-full sm:w-auto text-center"
           >
-            Explore Projects
+            See What I've Built
           </a>
           <a
-            href="#contact"
-            className="text-sm font-semibold leading-6 text-foreground hover:text-accent transition-all"
+            href="/#contact"
+            className="text-sm font-semibold text-foreground hover:text-accent transition-all flex items-center gap-2"
           >
-            Get in touch <span aria-hidden="true">→</span>
+            Let's Work Together <span aria-hidden="true">→</span>
           </a>
         </motion.div>
       </motion.div>

@@ -109,7 +109,7 @@ export default function URLShortener() {
       <div className="fixed inset-0 z-[-1] bg-[radial-gradient(circle_at_center,transparent_0%,#050505_100%)] pointer-events-none" />
       <main className="relative z-10 max-w-7xl mx-auto px-6 py-12 pt-32">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-          <Link href="/tools" className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-accent-muted hover:text-accent transition-colors mb-6">
+          <Link href="/tools.html" className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-accent-muted hover:text-accent transition-colors mb-6">
             <ArrowLeft className="w-4 h-4" /> Back to Tools
           </Link>
           <div className="flex items-center gap-3 text-accent-muted mb-4">

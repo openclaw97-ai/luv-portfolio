@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Cpu, Activity, Shield, Zap, ExternalLink } from "lucide-react";
+import { Wrench, Clock, Shield, Zap } from "lucide-react";
 
-export const Lab01Card = () => {
-  const tags = ["AI", "Automation", "Distributed Systems"];
+export const ToolsCard = () => {
+  const tags = ["Productivity", "Web Tools", "Free"];
 
   return (
     <motion.div
@@ -12,7 +12,7 @@ export const Lab01Card = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       whileHover={{ y: -5 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
       className="group relative overflow-hidden rounded-xs border border-grid-strong bg-neutral-900/40 p-8 backdrop-blur-sm"
     >
       {/* Engineering Corner Accents */}
@@ -29,24 +29,26 @@ export const Lab01Card = () => {
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-accent">
-              <Cpu size={18} />
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em]">Project_Lab01</span>
+              <Wrench size={18} />
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em]">
+                Free Utilities
+              </span>
             </div>
             <h3 className="text-3xl font-bold tracking-tight text-foreground transition-colors group-hover:text-accent">
-              Lab-01 Platform
+              Web Tools Suite
             </h3>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-full border border-grid-strong bg-neutral-900 group-hover:border-accent/40 transition-colors">
-            <Activity className="text-accent/40 group-hover:text-accent group-hover:animate-pulse transition-colors" />
+            <Zap className="text-accent/40 group-hover:text-accent group-hover:animate-pulse transition-colors" />
           </div>
         </div>
 
         {/* Content Section */}
         <div className="space-y-4">
           <p className="text-accent-muted leading-relaxed font-sans text-lg">
-            A robust orchestration platform for managing autonomous AI agents at scale. 
-            Imagine having a team that never sleeps, never makes mistakes, and handles 
-            the repetitive work while you focus on strategy. That's Lab-01.
+            A collection of free, privacy-focused utilities designed to eliminate annoying 
+            tasks from your daily workflow. URL shorteners, download helpers, and more—built 
+            because I was tired of ad-ridden alternatives that harvest your data.
           </p>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
@@ -67,25 +69,19 @@ export const Lab01Card = () => {
               <Shield size={14} className="text-accent/60" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] font-mono uppercase text-accent-muted">Uptime</span>
-              <span className="text-xs font-semibold text-foreground italic">99.9%</span>
+              <span className="text-[9px] font-mono uppercase text-accent-muted">Privacy</span>
+              <span className="text-xs font-semibold text-foreground italic">No Tracking</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center bg-neutral-800 border border-grid">
-              <Zap size={14} className="text-accent/60" />
+              <Clock size={14} className="text-accent/60" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] font-mono uppercase text-accent-muted">Latency</span>
-              <span className="text-xs font-semibold text-foreground italic">&lt; 12ms</span>
+              <span className="text-[9px] font-mono uppercase text-accent-muted">Time Saved</span>
+              <span className="text-xs font-semibold text-foreground italic">5-10 min/task</span>
             </div>
           </div>
-        </div>
-
-        {/* Coming Soon Badge */}
-        <div className="flex items-center gap-2 text-accent-muted text-sm">
-          <ExternalLink size={14} />
-          <span>Private Beta — Inquire for Access</span>
         </div>
       </div>
 

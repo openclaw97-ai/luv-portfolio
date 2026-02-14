@@ -2,23 +2,23 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Link2, Youtube, ArrowRight } from 'lucide-react';
+import { Wrench, ArrowRight, Scissors, Youtube } from 'lucide-react';
 
 const TOOLS = [
   {
     id: 'url-shortener',
     name: 'URL Shortener',
-    description: 'Generate shortened links with custom aliases',
-    icon: Link2,
-    href: '/tools/url-shortener',
+    description: 'Generate shortened links with custom aliases. No tracking, no bloat.',
+    icon: Scissors,
+    href: '/tools/url-shortener.html',
     tags: ['Utility', 'Web'],
   },
   {
     id: 'youtube-downloader',
     name: 'YouTube Downloader',
-    description: 'Download videos and audio from YouTube',
+    description: 'Download videos and audio from YouTube. Fast and privacy-focused.',
     icon: Youtube,
-    href: '/tools/youtube-downloader',
+    href: '/tools/youtube-downloader.html',
     tags: ['Media', 'Download'],
   },
 ];
@@ -38,7 +38,7 @@ const itemVariants = {
   show: { opacity: 1, y: 0 },
 };
 
-export default function FunctionsPage() {
+export default function ToolsPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Background */}
@@ -57,10 +57,14 @@ export default function FunctionsPage() {
             <span className="text-xs font-mono uppercase tracking-[0.3em]">Tool_Registry</span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-            Utility <span className="text-accent underline decoration-grid-strong underline-offset-[12px] decoration-4">Functions</span>
+            Free{" "}
+            <span className="text-accent underline decoration-grid-strong underline-offset-[12px] decoration-4">
+              Web Tools
+            </span>
           </h1>
           <p className="text-lg text-accent-muted max-w-2xl">
-            Lightweight utilities built for efficiency. No tracking, no bloat.
+            A growing collection of utilities I built to solve my own headaches. 
+            No ads. No tracking. Just tools that work.
           </p>
         </motion.div>
 
@@ -86,7 +90,9 @@ export default function FunctionsPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-accent">
                         <tool.icon className="w-5 h-5" />
-                        <span className="text-[10px] font-mono uppercase tracking-[0.2em]">Function_{tool.id}</span>
+                        <span className="text-[10px] font-mono uppercase tracking-[0.2em]">
+                          Function_{tool.id}
+                        </span>
                       </div>
                       <h2 className="text-3xl font-bold tracking-tight text-foreground transition-colors group-hover:text-accent">
                         {tool.name}
@@ -97,9 +103,7 @@ export default function FunctionsPage() {
                     </div>
                   </div>
 
-                  <p className="text-accent-muted leading-relaxed">
-                    {tool.description}
-                  </p>
+                  <p className="text-accent-muted leading-relaxed">{tool.description}</p>
 
                   <div className="flex flex-wrap gap-2">
                     {tool.tags.map((tag) => (
@@ -124,12 +128,12 @@ export default function FunctionsPage() {
           transition={{ delay: 0.5 }}
           className="mt-16"
         >
-          <Link
+          <a
             href="/"
             className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-accent-muted hover:text-accent transition-colors"
           >
-            ← Return to Portfolio
-          </Link>
+            <ArrowRight className="w-4 h-4 rotate-180" /> Return to Portfolio
+          </a>
         </motion.div>
       </main>
     </div>
