@@ -1,0 +1,9 @@
+@@ -33,7 +33,7 @@
+ 
+   return (
+     <nav className="fixed top-0 left-0 w-full z-50 flex justify-center py-10 px-4 pointer-events-none">
+-      <div className="relative">
++      <div className="relative overflow-visible">
+         <motion.div
+           initial={{ y: -20, opacity: 0 }}
+           animate={{ y: 0, opacity: 1 }}
