@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Wrench, Clock, Shield, Zap } from "lucide-react";
+import { Phone, Bot, Zap, TrendingUp } from "lucide-react";
 
-export const ToolsCard = () => {
-  const tags = ["Productivity", "Web Tools", "Free"];
+export const PhoneBotCard = () => {
+  const tags = ["AI Voice", "Automation", "Sales"];
 
   return (
     <motion.div
@@ -12,7 +12,7 @@ export const ToolsCard = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       whileHover={{ y: -5 }}
-      transition={{ duration: 0.5, delay: 0.1 }}
+      transition={{ duration: 0.5, delay: 0.15 }}
       className="group relative overflow-hidden rounded-xs border border-grid-strong bg-neutral-900/40 p-8 backdrop-blur-sm"
     >
       {/* Engineering Corner Accents */}
@@ -29,26 +29,26 @@ export const ToolsCard = () => {
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-accent">
-              <Wrench size={18} />
+              <Phone size={18} />
               <span className="text-[10px] font-mono uppercase tracking-[0.2em]">
-                PROJECT_WEB_SUITE
+                PROJECT_AI_VOICE
               </span>
             </div>
             <h3 className="text-3xl font-bold tracking-tight text-foreground transition-colors group-hover:text-accent">
-              Web Tools Suite
+              AI Voice Agents
             </h3>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-full border border-grid-strong bg-neutral-900 group-hover:border-accent/40 transition-colors">
-            <Zap className="text-accent/40 group-hover:text-accent group-hover:animate-pulse transition-colors" />
+            <Bot className="text-accent/40 group-hover:text-accent group-hover:animate-pulse transition-colors" />
           </div>
         </div>
 
         {/* Content Section */}
         <div className="space-y-4">
           <p className="text-accent-muted leading-relaxed font-sans text-lg">
-            A collection of free, privacy-focused utilities designed to eliminate annoying 
-            tasks from your daily workflow. URL shorteners, download helpers, and more—built 
-            because I was tired of ad-ridden alternatives that harvest your data.
+            Never miss another call. Built AI-powered phone agents that handle reception, 
+            qualify leads, and run cold outreach—24/7, without the overhead. Your team 
+            focuses on closing deals while bots handle the time-wasters.
           </p>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
@@ -66,20 +66,20 @@ export const ToolsCard = () => {
         <div className="mt-4 grid grid-cols-2 gap-4 border-t border-grid pt-6">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center bg-neutral-800 border border-grid">
-              <Shield size={14} className="text-accent/60" />
+              <Zap size={14} className="text-accent/60" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] font-mono uppercase text-accent-muted">Privacy</span>
-              <span className="text-xs font-semibold text-foreground italic">No Tracking</span>
+              <span className="text-[9px] font-mono uppercase text-accent-muted">Response Time</span>
+              <span className="text-xs font-semibold text-foreground italic">&lt; 2 Seconds</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center bg-neutral-800 border border-grid">
-              <Clock size={14} className="text-accent/60" />
+              <TrendingUp size={14} className="text-accent/60" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] font-mono uppercase text-accent-muted">Time Saved</span>
-              <span className="text-xs font-semibold text-foreground italic">5-10 min/task</span>
+              <span className="text-[9px] font-mono uppercase text-accent-muted">Conversion Lift</span>
+              <span className="text-xs font-semibold text-foreground italic">+40% Leads</span>
             </div>
           </div>
         </div>

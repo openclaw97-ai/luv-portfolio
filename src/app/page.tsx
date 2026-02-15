@@ -2,6 +2,7 @@ import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Lab01Card } from "@/components/Lab01Card";
 import { ToolsCard } from "@/components/ToolsCard";
+import { PhoneBotCard } from "@/components/PhoneBotCard";
 import { Contact } from "@/components/Contact";
 
 export default function Home() {
@@ -32,10 +33,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Lab01Card />
             <ToolsCard />
-            {/* Future project slot */}
-            <div className="hidden lg:flex border border-dashed border-grid-strong/50 rounded-xs flex-col items-center justify-center p-8 opacity-20">
-              <span className="text-xs font-mono uppercase tracking-widest">[Your Project Here]</span>
-            </div>
+            <PhoneBotCard />
           </div>
         </div>
       </section>

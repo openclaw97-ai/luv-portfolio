@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: youtube-downloader-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: ALLOWED_ORIGINS
+        value: https://luvportoflio.netlify.app,http://localhost:3000,http://localhost:3002
+    plan: free
