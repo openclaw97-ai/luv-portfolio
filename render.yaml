@@ -11,5 +11,5 @@ services:
       - key: PORT
         value: 10000
       - key: ALLOWED_ORIGINS
-        value: https://luvportoflio.netlify.app,http://localhost:3000,http://localhost:3002
+        value: https://luvpatel.net,http://localhost:3000,http://localhost:3002,http://192.168.68.101:3002
     plan: free
