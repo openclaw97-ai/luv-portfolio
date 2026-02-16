@@ -23,7 +23,7 @@ app.use(helmet());
 const corsOptions = {
   origin: process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',')
-    : ['http://localhost:3000', 'http://localhost:3002', 'http://192.168.68.101:3002', 'http://192.168.68.106:3002'],
+    : ['http://localhost:3000', 'http://localhost:3002', 'http://192.168.68.101:3002', 'http://192.168.68.106:3002', 'https://luvpatel.net'],
   methods: ['POST', 'GET', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
   credentials: true
@@ -140,7 +140,10 @@ app.post('/api/download', async (req, res) => {
       return res.status(400).json({ error: 'Invalid YouTube URL' });
     }
 
-    const format = formatId || 'best[height<=720]';
+    // Use bestaudio for MP3 requests, best for video
+    const isAudioRequest = formatId === 'bestaudio';
+    const format = isAudioRequest ? 'bestaudio' : (formatId || 'best[height<=720]');
+    
     const result = await runYtDlp(url, [
       '--dump-json',
       '--format', format,
@@ -156,9 +159,14 @@ app.post('/api/download', async (req, res) => {
     const videoUrl = new URL(result.url);
     const client = videoUrl.protocol === 'https:' ? https : http;
 
-    const filename = `${result.title.replace(/[^a-zA-Z0-9]/g, '_')}.${result.ext || 'mp4'}`;
+    // Determine proper filename and content-type based on format
+    const isAudioOnly = !result.vcodec || result.vcodec === 'none' || isAudioRequest;
+    const ext = isAudioOnly ? (result.ext || 'm4a') : (result.ext || 'mp4');
+    const contentType = isAudioOnly ? 'audio/mp4' : (result.content_type || 'video/mp4');
+    const filename = `${result.title.replace(/[^a-zA-Z0-9]/g, '_')}.${ext}`;
+
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.setHeader('Content-Type', result.content_type || 'video/mp4');
+    res.setHeader('Content-Type', contentType);
 
     client.get(result.url, {
       headers: {
@@ -169,6 +177,11 @@ app.post('/api/download', async (req, res) => {
       if (videoRes.statusCode !== 200) {
         res.status(500).json({ error: `Failed to fetch video: ${videoRes.statusCode}` });
         return;
+      }
+      // Forward content length if available
+      const contentLength = videoRes.headers['content-length'];
+      if (contentLength) {
+        res.setHeader('Content-Length', contentLength);
       }
       videoRes.pipe(res);
     }).on('error', (err) => {
@@ -203,7 +216,9 @@ app.post('/api/stream-url', async (req, res) => {
       return res.status(400).json({ error: 'Invalid YouTube URL' });
     }
 
-    const format = formatId || 'best[height<=720]';
+    const isAudioRequest = formatId === 'bestaudio';
+    const format = isAudioRequest ? 'bestaudio' : (formatId || 'best[height<=720]');
+    
     const result = await runYtDlp(url, [
       '--dump-json',
       '--format', format,
@@ -211,10 +226,12 @@ app.post('/api/stream-url', async (req, res) => {
       '--no-warnings'
     ]);
 
+    const ext = isAudioRequest ? 'm4a' : (result.ext || 'mp4');
+
     res.json({
       title: result.title,
       url: result.url,
-      ext: result.ext,
+      ext: ext,
       format: result.format,
       duration: result.duration
     });

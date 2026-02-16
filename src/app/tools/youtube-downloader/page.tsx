@@ -4,12 +4,16 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Youtube, ArrowLeft, Download, Video, Music, Loader2 } from 'lucide-react';
 
-const API_URL = 'http://192.168.68.101:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function YouTubeDownloader() {
   const [url, setUrl] = useState('');
   const [format, setFormat] = useState<'mp4' | 'mp3'>('mp4');
   const [loading, setLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [downloadedBytes, setDownloadedBytes] = useState(0);
+  const [totalBytes, setTotalBytes] = useState(0);
   const [videoInfo, setVideoInfo] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -117,7 +121,7 @@ export default function YouTubeDownloader() {
               </div>
             </div>
             <button type="submit" disabled={loading || !url} className="inline-flex items-center gap-3 bg-accent text-background px-8 py-4 font-mono font-bold text-sm tracking-widest hover:bg-accent-muted transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-              {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Fetching...</> : <><Download className="w-4 h-4" /> Fetch Info</>}
+              {downloading ? <><Loader2 className="w-4 h-4 animate-spin" /> Fetching...</> : <><Download className="w-4 h-4" /> Fetch Info</>}
             </button>
           </form>
 
@@ -133,8 +137,8 @@ export default function YouTubeDownloader() {
                   <h3 className="text-lg font-bold text-foreground">{videoInfo.title}</h3>
                   <p className="text-sm text-accent-muted">{videoInfo.author}</p>
                   <p className="text-sm text-accent-muted">Duration: {videoInfo.duration}s</p>
-                  <button onClick={handleDownload} disabled={loading} className="inline-flex items-center gap-2 bg-accent text-background px-6 py-3 font-mono font-bold text-xs tracking-widest hover:bg-accent-muted transition-all mt-4 disabled:opacity-50">
-                    {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Downloading...</> : <><Download className="w-4 h-4" /> Download {format.toUpperCase()}</>}
+                  <button onClick={handleDownload} disabled={downloading} className="inline-flex items-center gap-2 bg-accent text-background px-6 py-3 font-mono font-bold text-xs tracking-widest hover:bg-accent-muted transition-all mt-4 disabled:opacity-50">
+                    {downloading ? <><Loader2 className="w-4 h-4 animate-spin" /> Downloading...</> : <><Download className="w-4 h-4" /> Download {format.toUpperCase()}</>}
                   </button>
                 </div>
               </div>
