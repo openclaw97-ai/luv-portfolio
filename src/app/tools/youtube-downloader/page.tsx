@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Youtube, ArrowLeft, Download, Video, Music, Loader2 } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.68.101:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://youtube-downloader-api-87ko.onrender.com';
 
 export default function YouTubeDownloader() {
   const [url, setUrl] = useState('');
