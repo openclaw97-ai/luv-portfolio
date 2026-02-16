@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3001;
 const HOST = '0.0.0.0';
 
 // Python and yt-dlp paths
-const PYTHON_PATH = process.env.PYTHON_PATH || '/opt/homebrew/bin/python3.11';
+const PYTHON_PATH = process.env.PYTHON_PATH || 'python3';
 const YTDLP_MODULE = 'yt_dlp';
 
 // Security middleware
