@@ -4,15 +4,13 @@ services:
     runtime: node
     region: ohio
     rootDir: backend
-    buildCommand: npm install && npm run build
+    buildCommand: pip install yt-dlp && npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 3001
-      - key: PYTHON_PATH
-        value: /usr/local/bin/python3
       - key: ALLOWED_ORIGINS
         value: https://luvportoflio.netlify.app,https://luvpatel.net,http://localhost:3000,http://localhost:3001,http://localhost:3002
     plan: free

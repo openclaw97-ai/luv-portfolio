@@ -10,11 +10,11 @@ require('dotenv').config();
 
 const execFileAsync = promisify(execFile);
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8765;
 const HOST = '0.0.0.0';
 
 // Python and yt-dlp paths
-const PYTHON_PATH = process.env.PYTHON_PATH || 'python3';
+const PYTHON_PATH = process.env.PYTHON_PATH || '/opt/homebrew/bin/python3.11';
 const YTDLP_MODULE = 'yt_dlp';
 
 // Security middleware
@@ -22,7 +22,7 @@ app.use(helmet());
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:3000', 'http://localhost:3002', 'http://192.168.68.101:3002', 'http://192.168.68.106:3002', 'https://luvpatel.net'],
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:3000', 'http://192.168.68.101:3000', 'http://localhost:3002', 'http://192.168.68.101:3002', 'http://192.168.68.106:3002', 'https://luvpatel.net'],
   methods: ['POST', 'GET', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
   credentials: true
@@ -41,22 +41,77 @@ app.use('/api/', limiter);
 app.use(express.json());
 
 // Helper function to run yt-dlp async - with rate limiting protections
-async function runYtDlp(url, flags = []) {
-  const baseFlags = [
+async function runYtDlp(url, flags = [], retries = 2) {
+  // First attempt: with user-agent to bypass YouTube's rate limiting
+  const baseFlags1 = [
     '--sleep-interval', '2',
     '--max-sleep-interval', '5',
     '--extractor-args', 'youtube:player_skip=webpage,configs,js',
-    '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+    '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     '--referer', 'https://www.youtube.com/',
     '--no-check-certificates',
     '--no-warnings'
   ];
-  const args = ['-m', YTDLP_MODULE, ...baseFlags, ...flags, url];
-  const { stdout } = await execFileAsync(PYTHON_PATH, args, {
-    maxBuffer: 10 * 1024 * 1024,
-    timeout: 120000
-  });
-  return JSON.parse(stdout);
+  
+  // Second attempt: different flags for retry
+  const baseFlags2 = [
+    '--sleep-interval', '1',
+    '--max-sleep-interval', '3',
+    '--extractor-args', 'youtube:player_skip=webpage,configs,js',
+    '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    '--referer', 'https://www.youtube.com/',
+    '--no-check-certificates',
+    '--no-warnings',
+    '--compat-options', 'no-youtube-unavailable-videos'
+  ];
+  
+  const args1 = ['-m', YTDLP_MODULE, ...baseFlags1, ...flags, url];
+  const args2 = ['-m', YTDLP_MODULE, ...baseFlags2, ...flags, url];
+  let lastError = null;
+  
+  // Try with first set of flags
+  try {
+    const { stdout } = await execFileAsync(PYTHON_PATH, args1, {
+      maxBuffer: 10 * 1024 * 1024,
+      timeout: 180000
+    });
+    return JSON.parse(stdout);
+  } catch (error) {
+    lastError = error;
+    const errMsg = error.stderr || error.message || '';
+    console.log(`yt-dlp attempt 1 failed: ${errMsg.substring(0, 100)}...`);
+  }
+  
+  // Retry with second set of flags
+  if (retries > 0) {
+    try {
+      const { stdout } = await execFileAsync(PYTHON_PATH, args2, {
+        maxBuffer: 10 * 1024 * 1024,
+        timeout: 180000
+      });
+      return JSON.parse(stdout);
+    } catch (error) {
+      lastError = error;
+      const errMsg = error.stderr || error.message || '';
+      console.log(`yt-dlp attempt 2 failed: ${errMsg.substring(0, 100)}...`);
+      // Wait before final retry
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+  }
+  
+  // Final retry with first flags again (sometimes helps)
+  try {
+    const { stdout } = await execFileAsync(PYTHON_PATH, args1, {
+      maxBuffer: 10 * 1024 * 1024,
+      timeout: 180000
+    });
+    return JSON.parse(stdout);
+  } catch (error) {
+    lastError = error;
+    console.log(`yt-dlp final attempt failed: ${error.message}`);
+  }
+  
+  throw lastError;
 }
 
 // Health check

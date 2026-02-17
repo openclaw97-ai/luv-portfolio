@@ -10,7 +10,7 @@ const TOOLS = [
     name: 'URL Shortener',
     description: 'Generate shortened links with custom aliases. No tracking, no bloat.',
     icon: Scissors,
-    href: '/tools/url-shortener.html',
+    href: '/tools/url-shortener',
     tags: ['Utility', 'Web'],
   },
   {
@@ -18,7 +18,7 @@ const TOOLS = [
     name: 'YouTube Downloader',
     description: 'Download videos and audio from YouTube. Fast and privacy-focused.',
     icon: Youtube,
-    href: '/tools/youtube-downloader.html',
+    href: '/tools/youtube-downloader',
     tags: ['Media', 'Download'],
   },
 ];

@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 import { Link2, Youtube } from 'lucide-react';
 
 const TOOLS = [
-  { name: 'URL Shortener', href: '/tools/url-shortener.html', icon: Link2 },
-  { name: 'YouTube Downloader', href: '/tools/youtube-downloader.html', icon: Youtube },
+  { name: 'URL Shortener', href: '/tools/url-shortener', icon: Link2 },
+  { name: 'YouTube Downloader', href: '/tools/youtube-downloader', icon: Youtube },
 ];
 
 export const Navbar = () => {
@@ -35,7 +35,7 @@ export const Navbar = () => {
           <div className="hidden lg:flex items-center gap-10">
             <a href="/#about" className="text-xs uppercase tracking-wider font-bold text-white/50 hover:text-white transition-colors">About</a>
             <a href="/#projects" className="text-xs uppercase tracking-wider font-bold text-white/50 hover:text-white transition-colors">Projects</a>
-            <a href="/tools.html" className="text-xs uppercase tracking-wider font-bold text-white/50 hover:text-white transition-colors">Tools</a>
+            <a href="/tools" className="text-xs uppercase tracking-wider font-bold text-white/50 hover:text-white transition-colors">Tools</a>
           </div>
           <a href="/#contact" className="hidden lg:flex px-6 py-2 bg-accent text-background text-xs font-bold uppercase tracking-wider rounded-full hover:bg-accent/80 transition-colors">
             Connect
@@ -73,7 +73,7 @@ export const Navbar = () => {
           
           {/* Desktop Tools Dropdown */}
           <div className="relative group">
-            <a href="/tools.html" className="text-xs uppercase tracking-wider font-bold text-white/50 hover:text-white transition-colors">
+            <a href="/tools" className="text-xs uppercase tracking-wider font-bold text-white/50 hover:text-white transition-colors">
               Tools
             </a>
             <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity">
@@ -134,7 +134,7 @@ export const Navbar = () => {
               
               {/* Tools Section */}
               <a 
-                href="/tools.html"
+                href="/tools"
                 onClick={closeMenu}
                 className="block px-4 py-3 text-sm uppercase tracking-wider font-bold text-accent bg-white/5 rounded-lg mt-1"
               >
