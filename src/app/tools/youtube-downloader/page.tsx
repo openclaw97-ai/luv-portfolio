@@ -102,6 +102,7 @@ export default function YouTubeDownloader() {
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">YouTube <span className="text-accent">Downloader</span></h1>
           <p className="text-accent-muted max-w-xl">Download videos and audio from YouTube. Supports MP4 and MP3 formats.</p>
+          <p className="text-xs text-yellow-500/80 mt-2 max-w-xl">Note: Not all videos are supported due to YouTube restrictions (music, age-restricted, etc.)</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="max-w-2xl">
@@ -142,7 +143,6 @@ export default function YouTubeDownloader() {
                     {downloading ? <><Loader2 className="w-4 h-4 animate-spin" /> Preparing download...</> : <><Download className="w-4 h-4" /> Download {format.toUpperCase()}</>}
                   </button>
                   <p className="text-xs text-accent-muted mt-2">Download may take 10-30 seconds to start while server fetches from YouTube</p>
-                  <p className="text-xs text-yellow-500/80 mt-1">Note: Not all videos are supported due to YouTube restrictions</p>
                 </div>
               </div>
             </motion.div>
