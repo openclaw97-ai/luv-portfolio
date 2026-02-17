@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Link2, Youtube } from 'lucide-react';
+import { Link2, Youtube, Music, Menu, X } from 'lucide-react';
 
 const TOOLS = [
   { name: 'URL Shortener', href: '/tools/url-shortener', icon: Link2 },
   { name: 'YouTube Downloader', href: '/tools/youtube-downloader', icon: Youtube },
+  { name: 'Audio Studio', href: '/tools/audio-editor', icon: Music },
 ];
 
 export const Navbar = () => {
@@ -48,14 +48,10 @@ export const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 flex justify-center py-6 px-4">
       <div className="rounded-full px-6 py-3 flex items-center gap-8 md:gap-16 border border-white/10 bg-neutral-900/60 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.8)]">
-        
-        {/* Mobile Logo/Button */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden font-bold tracking-tighter text-xl text-foreground"
-        >
+        {/* Mobile Logo - Links to home */}
+        <a href="/" className="lg:hidden font-bold tracking-tighter text-xl text-foreground hover:opacity-80 transition-opacity">
           LUV<span className="text-accent">.</span>
-        </button>
+        </a>
 
         {/* Desktop Logo */}
         <a href="/" className="hidden lg:flex font-bold tracking-tighter text-xl text-foreground hover:opacity-80 transition-opacity">
@@ -70,7 +66,6 @@ export const Navbar = () => {
           <a href="/#projects" className="text-xs uppercase tracking-wider font-bold text-white/50 hover:text-white transition-colors">
             Projects
           </a>
-          
           {/* Desktop Tools Dropdown */}
           <div className="relative group">
             <a href="/tools" className="text-xs uppercase tracking-wider font-bold text-white/50 hover:text-white transition-colors">
@@ -97,19 +92,27 @@ export const Navbar = () => {
         <a href="/#contact" className="hidden lg:flex px-6 py-2 bg-accent text-background text-xs font-bold uppercase tracking-wider rounded-full hover:bg-accent/80 transition-colors">
           Connect
         </a>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="lg:hidden p-2 text-white/70 hover:text-white transition-colors"
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-[9998] lg:hidden"
           onClick={() => setMobileOpen(false)}
         >
           {/* Backdrop */}
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          
           {/* Menu */}
-          <div 
+          <div
             className="absolute top-20 left-1/2 -translate-x-1/2 w-[90vw] max-w-[320px] bg-neutral-900/95 border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
@@ -122,7 +125,6 @@ export const Navbar = () => {
               >
                 About
               </a>
-              
               {/* Projects */}
               <a
                 href="/#projects"
@@ -131,9 +133,8 @@ export const Navbar = () => {
               >
                 Projects
               </a>
-              
               {/* Tools Section */}
-              <a 
+              <a
                 href="/tools"
                 onClick={closeMenu}
                 className="block px-4 py-3 text-sm uppercase tracking-wider font-bold text-accent bg-white/5 rounded-lg mt-1"
@@ -153,7 +154,6 @@ export const Navbar = () => {
                   </a>
                 ))}
               </div>
-              
               {/* Connect */}
               <a
                 href="/#contact"

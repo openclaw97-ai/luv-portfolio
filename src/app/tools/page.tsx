@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Wrench, ArrowRight, Scissors, Youtube } from 'lucide-react';
+import { Wrench, ArrowRight, Scissors, Youtube, Music } from 'lucide-react';
 
 const TOOLS = [
   {
@@ -20,6 +20,14 @@ const TOOLS = [
     icon: Youtube,
     href: '/tools/youtube-downloader',
     tags: ['Media', 'Download'],
+  },
+  {
+    id: 'audio-editor',
+    name: 'Audio Studio',
+    description: 'Edit, trim, cut, and apply fades to audio files. All processing happens in your browser.',
+    icon: Music,
+    href: '/tools/audio-editor',
+    tags: ['Media', 'Audio'],
   },
 ];
 
