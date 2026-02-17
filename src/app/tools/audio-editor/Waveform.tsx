@@ -41,9 +41,9 @@ export default function Waveform({ buffer, containerRef, onReady, onUnmount, onP
     const regions = RegionsPlugin.create();
     const ws = WaveSurfer.create({
       container: containerRef.current,
-      waveColor: 'hsl(174, 72%, 50%)',
-      progressColor: 'hsl(174, 80%, 35%)',
-      cursorColor: 'hsl(0, 0%, 80%)',
+      waveColor: 'rgba(255, 255, 255, 0.3)',
+      progressColor: '#ffffff',
+      cursorColor: '#ffffff',
       cursorWidth: 1,
       height: 180,
       barWidth: 2,
@@ -60,7 +60,7 @@ export default function Waveform({ buffer, containerRef, onReady, onUnmount, onP
 
     let activeRegion: any = null;
     regions.enableDragSelection({
-      color: 'hsla(174, 72%, 50%, 0.15)',
+      color: 'rgba(255, 255, 255, 0.1)',
     });
 
     regions.on('region-created', (region: any) => {
@@ -69,7 +69,9 @@ export default function Waveform({ buffer, containerRef, onReady, onUnmount, onP
       }
       activeRegion = region;
       region.setOptions({
-        color: 'hsla(174, 72%, 50%, 0.25)',
+        color: 'rgba(255, 255, 255, 0.2)',
+        borderColor: 'rgba(255, 255, 255, 0.5)',
+        borderWidth: 1,
       });
       onRegionChange({ start: region.start, end: region.end });
     });
