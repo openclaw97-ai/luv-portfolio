@@ -53,7 +53,7 @@ export default function YouTubeDownloader() {
   const handleDownload = async () => {
     if (!videoInfo) return;
     setError(null);
-    setLoading(true);
+    setDownloading(true);
 
     try {
       const response = await fetch(`${API_URL}/api/download`, {
@@ -83,7 +83,7 @@ export default function YouTubeDownloader() {
     } catch (err: any) {
       setError(err.message || 'Download failed');
     } finally {
-      setLoading(false);
+      setDownloading(false);
     }
   };
 
@@ -139,8 +139,9 @@ export default function YouTubeDownloader() {
                   <p className="text-sm text-accent-muted">{videoInfo.author}</p>
                   <p className="text-sm text-accent-muted">Duration: {videoInfo.duration}s</p>
                   <button onClick={handleDownload} disabled={downloading} className="inline-flex items-center gap-2 bg-accent text-background px-6 py-3 font-mono font-bold text-xs tracking-widest hover:bg-accent-muted transition-all mt-4 disabled:opacity-50">
-                    {downloading ? <><Loader2 className="w-4 h-4 animate-spin" /> Downloading...</> : <><Download className="w-4 h-4" /> Download {format.toUpperCase()}</>}
+                    {downloading ? <><Loader2 className="w-4 h-4 animate-spin" /> Preparing download...</> : <><Download className="w-4 h-4" /> Download {format.toUpperCase()}</>}
                   </button>
+                  <p className="text-xs text-accent-muted mt-2">Download may take 10-30 seconds to start while server fetches from YouTube</p>
                 </div>
               </div>
             </motion.div>
