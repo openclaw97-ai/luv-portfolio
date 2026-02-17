@@ -325,7 +325,7 @@ export default function AudioEditorPage() {
             />
 
             <div className="border border-grid-strong bg-neutral-900/40 p-4 relative">
-              <div ref={containerRef} className="w-full min-h-[200px]">
+              <div ref={containerRef} className="w-full min-h-[200px] select-none">
                 {audioBuffer && (
                   <Waveform
                 key={editKey}
