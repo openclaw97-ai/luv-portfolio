@@ -41,7 +41,7 @@ export const Contact = () => {
               
               <div className="pt-4 flex justify-center md:justify-start">
                 <a
-                  href="https://t.me/lovie97"
+                  href="https://www.linkedin.com/in/luv-patel97/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 bg-accent text-background px-8 py-4 font-mono font-bold text-sm tracking-widest hover:bg-accent-muted transition-all duration-300 group shadow-lg shadow-accent/10"
