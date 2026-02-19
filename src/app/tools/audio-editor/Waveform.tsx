@@ -77,7 +77,12 @@ export default function Waveform({ buffer, containerRef, zoom, onReady, onUnmoun
     // Generate blob URL for this load
     const blobUrl = URL.createObjectURL(audioBufferToWav(buffer));
     blobUrlRef.current = blobUrl;
-    ws.load(blobUrl);
+    
+    // Handle the load promise to catch AbortErrors
+    ws.load(blobUrl).catch((err) => {
+      if (err.name === 'AbortError') return;
+      console.error('WaveSurfer load error:', err);
+    });
 
     let activeRegion: any = null;
     regions.enableDragSelection({
@@ -133,13 +138,16 @@ export default function Waveform({ buffer, containerRef, zoom, onReady, onUnmoun
     // Cleanup on unmount
     return () => {
       isInternalReady.current = false;
+      const currentWs = wsRef.current;
+      wsRef.current = null;
+      
       if (blobUrlRef.current) {
         URL.revokeObjectURL(blobUrlRef.current);
         blobUrlRef.current = null;
       }
-      if (wsRef.current) {
-        wsRef.current.destroy();
-        wsRef.current = null;
+      
+      if (currentWs) {
+        currentWs.destroy();
       }
       onUnmount();
     };
