@@ -27,7 +27,9 @@ export default function AudioEditorPage() {
   const [canRedo, setCanRedo] = useState(false);
   const [fadeInDuration, setFadeInDuration] = useState(1);
   const [fadeOutDuration, setFadeOutDuration] = useState(1);
+  const [zoom, setZoom] = useState(0);
   const [editKey, setEditKey] = useState(0);
+  const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const wsRef = useRef<WaveSurferInstance | null>(null);
@@ -51,6 +53,8 @@ export default function AudioEditorPage() {
 
   const handleFileLoaded = useCallback(async (file: File) => {
     try {
+      setIsLoading(true);
+      setIsReady(false);
       const buffer = await decodeAudioFile(file);
       setAudioBuffer(buffer);
       currentBufferRef.current = buffer;
@@ -69,6 +73,8 @@ export default function AudioEditorPage() {
       setEditKey(prev => prev + 1);
     } catch (error) {
       console.error('Error loading audio file:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -85,45 +91,58 @@ export default function AudioEditorPage() {
   }, []);
 
   const handleReady = useCallback((ws: WaveSurferInstance) => {
-    console.log('[DEBUG] Waveform ready, ws instance:', ws);
     wsRef.current = ws;
+    setIsReady(true);
   }, []);
 
   const handleUnmount = useCallback(() => {
-    console.log('[DEBUG] Waveform unmounting, clearing wsRef');
     wsRef.current = null;
+    setIsReady(false);
   }, []);
 
   const handleStop = useCallback(() => {
-    if (wsRef.current) {
+    if (wsRef.current && isReady) {
       wsRef.current.stop();
       wsRef.current.setTime(0);
       setCurrentTime(0);
       setIsPlaying(false);
     }
-  }, []);
+  }, [isReady]);
 
   const handlePlayPause = useCallback(() => {
-    if (wsRef.current) {
+    if (wsRef.current && isReady) {
       if (isPlaying) {
         wsRef.current.pause();
       } else {
         wsRef.current.play();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, isReady]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!audioBuffer || !isReady) return;
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        handlePlayPause();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [audioBuffer, isReady, handlePlayPause]);
 
   const handleTrim = useCallback(() => {
-    console.log('[DEBUG] handleTrim called');
-    if (!wsRef.current || !currentBufferRef.current) {
-      console.log('[DEBUG] Early return - wsRef or currentBuffer missing');
+    if (!wsRef.current || !currentBufferRef.current || !isReady) {
       return;
     }
 
     const regions = wsRef.current.getRegions();
-    console.log('[DEBUG] Regions found:', regions.length, regions);
     if (regions.length === 0) {
-      console.log('[DEBUG] No regions - returning early');
       return;
     }
 
@@ -137,6 +156,8 @@ export default function AudioEditorPage() {
     currentBufferRef.current = trimmedBuffer;
     setAudioBuffer(trimmedBuffer);
     setDuration(trimmedBuffer.duration);
+    setIsPlaying(false);
+    setIsReady(false);
 
     regions.forEach((r: any) => r.remove());
     setHasRegion(false);
@@ -148,22 +169,15 @@ export default function AudioEditorPage() {
       blobUrlRef.current = null;
     }
     setEditKey(prev => prev + 1);
-    if (wsRef.current) {
-      wsRef.current.setTime(0);
-    }
-  }, []);
+  }, [isReady]);
 
   const handleCut = useCallback(() => {
-    console.log('[DEBUG] handleCut called');
-    if (!wsRef.current || !currentBufferRef.current) {
-      console.log('[DEBUG] Early return - wsRef or currentBuffer missing');
+    if (!wsRef.current || !currentBufferRef.current || !isReady) {
       return;
     }
     
     const regions = wsRef.current.getRegions();
-    console.log('[DEBUG] Regions found:', regions.length, regions);
     if (regions.length === 0) {
-      console.log('[DEBUG] No regions - returning early');
       return;
     }
 
@@ -177,6 +191,8 @@ export default function AudioEditorPage() {
     currentBufferRef.current = cutBuffer;
     setAudioBuffer(cutBuffer);
     setDuration(cutBuffer.duration);
+    setIsPlaying(false);
+    setIsReady(false);
 
     regions.forEach((r: any) => r.remove());
     setHasRegion(false);
@@ -188,15 +204,17 @@ export default function AudioEditorPage() {
       blobUrlRef.current = null;
     }
     setEditKey(prev => prev + 1);
-  }, [currentTime]);
+  }, [currentTime, isReady]);
 
   const handleFadeIn = useCallback(() => {
-    if (!currentBufferRef.current) return;
+    if (!currentBufferRef.current || !isReady) return;
 
     const fadedBuffer = applyFadeIn(currentBufferRef.current, fadeInDuration);
     saveToUndo(fadedBuffer);
     currentBufferRef.current = fadedBuffer;
     setAudioBuffer(fadedBuffer);
+    setIsPlaying(false);
+    setIsReady(false);
 
     // Clean up current blob URL and force waveform reload
     if (blobUrlRef.current) {
@@ -204,15 +222,17 @@ export default function AudioEditorPage() {
       blobUrlRef.current = null;
     }
     setEditKey(prev => prev + 1);
-  }, [fadeInDuration]);
+  }, [fadeInDuration, isReady]);
 
   const handleFadeOut = useCallback(() => {
-    if (!currentBufferRef.current) return;
+    if (!currentBufferRef.current || !isReady) return;
 
     const fadedBuffer = applyFadeOut(currentBufferRef.current, fadeOutDuration);
     saveToUndo(fadedBuffer);
     currentBufferRef.current = fadedBuffer;
     setAudioBuffer(fadedBuffer);
+    setIsPlaying(false);
+    setIsReady(false);
 
     // Clean up current blob URL and force waveform reload
     if (blobUrlRef.current) {
@@ -220,7 +240,7 @@ export default function AudioEditorPage() {
       blobUrlRef.current = null;
     }
     setEditKey(prev => prev + 1);
-  }, [fadeOutDuration]);
+  }, [fadeOutDuration, isReady]);
 
   const handleDownload = useCallback(() => {
     if (!currentBufferRef.current) return;
@@ -238,12 +258,14 @@ export default function AudioEditorPage() {
 
   const handleUndo = useCallback(() => {
     if (undoRef.current.length > 0) {
-      const previousBuffer = undoRef.current[undoRef.current.length - 1];
+      const previousBuffer = undoRef.current.pop()!;
       redoRef.current.push(currentBufferRef.current!);
       currentBufferRef.current = previousBuffer;
       setAudioBuffer(previousBuffer);
-      setCanUndo(undoRef.current.length > 1);
+      setCanUndo(undoRef.current.length > 0);
       setCanRedo(true);
+      setIsPlaying(false);
+      setIsReady(false);
 
       // Clean up current blob URL and force waveform reload
       if (blobUrlRef.current) {
@@ -256,12 +278,14 @@ export default function AudioEditorPage() {
 
   const handleRedo = useCallback(() => {
     if (redoRef.current.length > 0) {
-      const nextBuffer = redoRef.current[redoRef.current.length - 1];
+      const nextBuffer = redoRef.current.pop()!;
       undoRef.current.push(currentBufferRef.current!);
       currentBufferRef.current = nextBuffer;
       setAudioBuffer(nextBuffer);
-      setCanRedo(redoRef.current.length > 1);
+      setCanRedo(redoRef.current.length > 0);
       setCanUndo(true);
+      setIsPlaying(false);
+      setIsReady(false);
 
       // Clean up current blob URL and force waveform reload
       if (blobUrlRef.current) {
@@ -273,12 +297,10 @@ export default function AudioEditorPage() {
   }, []);
 
   const saveToUndo = useCallback((newBuffer: AudioBuffer) => {
-    console.log('[DEBUG] saveToUndo called, newBuffer duration:', newBuffer.duration);
     undoRef.current.push(currentBufferRef.current!);
     setCanUndo(true);
     redoRef.current = [];
     setCanRedo(false);
-    console.log('[DEBUG] Undo stack size:', undoRef.current.length);
   }, []);
 
   return (
@@ -304,6 +326,7 @@ export default function AudioEditorPage() {
           <div className="space-y-6">
             <EditorToolbar
               isPlaying={isPlaying}
+              isReady={isReady}
               currentTime={currentTime}
               duration={duration}
               hasRegion={hasRegion}
@@ -311,6 +334,7 @@ export default function AudioEditorPage() {
               canRedo={canRedo}
               fadeInDuration={fadeInDuration}
               fadeOutDuration={fadeOutDuration}
+              zoom={zoom}
               onPlayPause={handlePlayPause}
               onStop={handleStop}
               onTrim={handleTrim}
@@ -322,6 +346,7 @@ export default function AudioEditorPage() {
               onRedo={handleRedo}
               onFadeInChange={setFadeInDuration}
               onFadeOutChange={setFadeOutDuration}
+              onZoomChange={setZoom}
             />
 
             <div className="border border-grid-strong bg-neutral-900/40 p-4 relative">
@@ -331,6 +356,7 @@ export default function AudioEditorPage() {
                 key={editKey}
                 buffer={audioBuffer}
                 containerRef={containerRef}
+                zoom={zoom}
                 onReady={handleReady}
                 onUnmount={handleUnmount}
                 onPlayStateChange={handlePlayStateChange}

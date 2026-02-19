@@ -1,10 +1,11 @@
 'use client';
 
-import { Play, Pause, SkipBack, Scissors, Crop, ArrowDownToLine, Undo2, Redo2 } from 'lucide-react';
+import { Play, Pause, SkipBack, Scissors, Crop, ArrowDownToLine, Undo2, Redo2, ZoomIn } from 'lucide-react';
 import { formatTime } from '@/lib/audio-utils';
 
 interface EditorToolbarProps {
   isPlaying: boolean;
+  isReady: boolean;
   currentTime: number;
   duration: number;
   hasRegion: boolean;
@@ -12,6 +13,7 @@ interface EditorToolbarProps {
   canRedo: boolean;
   fadeInDuration: number;
   fadeOutDuration: number;
+  zoom: number;
   onPlayPause: () => void;
   onStop: () => void;
   onTrim: () => void;
@@ -23,10 +25,12 @@ interface EditorToolbarProps {
   onRedo: () => void;
   onFadeInChange: (val: number) => void;
   onFadeOutChange: (val: number) => void;
+  onZoomChange: (val: number) => void;
 }
 
 const EditorToolbar = ({
   isPlaying,
+  isReady,
   currentTime,
   duration,
   hasRegion,
@@ -34,6 +38,7 @@ const EditorToolbar = ({
   canRedo,
   fadeInDuration,
   fadeOutDuration,
+  zoom,
   onPlayPause,
   onStop,
   onTrim,
@@ -45,21 +50,24 @@ const EditorToolbar = ({
   onRedo,
   onFadeInChange,
   onFadeOutChange,
+  onZoomChange,
 }: EditorToolbarProps) => {
   return (
-    <div className="border border-grid-strong bg-neutral-900/40 p-4 flex items-center gap-3 flex-wrap">
+    <div className={`border border-grid-strong bg-neutral-900/40 p-4 flex items-center gap-3 flex-wrap ${!isReady ? 'opacity-50 pointer-events-none' : ''}`}>
       {/* Playback */}
       <div className="flex items-center gap-2">
         <button
           onClick={onStop}
-          className="inline-flex items-center justify-center px-3 py-2 border border-grid-strong bg-neutral-900 hover:border-accent/50 transition-all"
+          disabled={!isReady}
+          className="inline-flex items-center justify-center px-3 py-2 border border-grid-strong bg-neutral-900 hover:border-accent/50 disabled:opacity-30 transition-all"
           title="Stop & rewind"
         >
           <SkipBack className="w-4 h-4 text-foreground" />
         </button>
         <button
           onClick={onPlayPause}
-          className="inline-flex items-center justify-center px-3 py-2 bg-accent text-background hover:bg-accent-muted transition-all"
+          disabled={!isReady}
+          className="inline-flex items-center justify-center px-3 py-2 bg-accent text-background hover:bg-accent-muted disabled:opacity-30 transition-all"
           title={isPlaying ? 'Pause' : 'Play'}
         >
           {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -71,6 +79,24 @@ const EditorToolbar = ({
         <span className="text-foreground">{formatTime(currentTime)}</span>
         <span className="mx-1">/</span>
         <span>{formatTime(duration)}</span>
+      </div>
+
+      <div className="w-px h-6 bg-grid-strong mx-1" />
+
+      {/* Zoom */}
+      <div className="flex items-center gap-2 min-w-[150px]">
+        <ZoomIn className="w-3.5 h-3.5 text-accent-muted" />
+        <input
+          type="range"
+          min={0}
+          max={200}
+          step={1}
+          value={zoom}
+          onChange={(e) => onZoomChange(parseInt(e.target.value))}
+          className="w-24 h-1 accent-accent bg-grid-strong cursor-pointer"
+          title="Zoom"
+        />
+        <span className="text-[10px] font-mono text-accent-muted">{zoom}px</span>
       </div>
 
       <div className="w-px h-6 bg-grid-strong mx-1" />

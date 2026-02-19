@@ -17,6 +17,7 @@ type WaveSurferInstance = WaveSurfer & {
 interface WaveformProps {
   buffer: AudioBuffer;
   containerRef: React.RefObject<HTMLDivElement>;
+  zoom: number;
   onReady: (ws: WaveSurferInstance) => void;
   onUnmount: () => void;
   onPlayStateChange: (playing: boolean) => void;
@@ -25,12 +26,25 @@ interface WaveformProps {
   blobUrlRef: React.MutableRefObject<string | null>;
 }
 
-export default function Waveform({ buffer, containerRef, onReady, onUnmount, onPlayStateChange, onTimeUpdate, onRegionChange, blobUrlRef }: WaveformProps) {
+export default function Waveform({ buffer, containerRef, zoom, onReady, onUnmount, onPlayStateChange, onTimeUpdate, onRegionChange, blobUrlRef }: WaveformProps) {
   const wsRef = useRef<WaveSurferInstance | null>(null);
-  const regionsRef = useRef<any>(null);
+  const isInternalReady = useRef(false);
+
+  // Handle zoom changes safely
+  useEffect(() => {
+    if (wsRef.current && isInternalReady.current) {
+      try {
+        wsRef.current.zoom(zoom);
+      } catch (e) {
+        console.warn('Zoom failed: audio not ready');
+      }
+    }
+  }, [zoom]);
 
   useEffect(() => {
     if (!containerRef.current) return;
+
+    isInternalReady.current = false;
 
     // Destroy existing instance if present
     if (wsRef.current) {
@@ -50,8 +64,15 @@ export default function Waveform({ buffer, containerRef, onReady, onUnmount, onP
       barGap: 1,
       barRadius: 2,
       normalize: true,
+      autoScroll: true,
       plugins: [regions],
     });
+
+    // Ensure container handles horizontal scroll when zoomed
+    if (containerRef.current) {
+      containerRef.current.style.overflowX = 'auto';
+      containerRef.current.style.overflowY = 'hidden';
+    }
 
     // Generate blob URL for this load
     const blobUrl = URL.createObjectURL(audioBufferToWav(buffer));
@@ -64,9 +85,11 @@ export default function Waveform({ buffer, containerRef, onReady, onUnmount, onP
     });
 
     regions.on('region-created', (region: any) => {
-      if (activeRegion && activeRegion !== region) {
-        activeRegion.remove();
-      }
+      // Clear previous region when starting a new selection
+      regions.getRegions().forEach((r: any) => {
+        if (r !== region) r.remove();
+      });
+      
       activeRegion = region;
       region.setOptions({
         color: 'rgba(255, 255, 255, 0.2)',
@@ -85,9 +108,13 @@ export default function Waveform({ buffer, containerRef, onReady, onUnmount, onP
     ws.on('pause', () => onPlayStateChange(false));
     ws.on('finish', () => onPlayStateChange(false));
 
-    // Store regions ref for cleanup
-    regionsRef.current = regions;
-    
+    // Double-click to clear selection
+    ws.on('dblclick', () => {
+      regions.getRegions().forEach((r: any) => r.remove());
+      activeRegion = null;
+      onRegionChange(null);
+    });
+
     // Add getRegions method and regions to the ws object
     const wsWithRegions = Object.assign(ws, {
       getRegions: () => regions.getRegions(),
@@ -95,16 +122,24 @@ export default function Waveform({ buffer, containerRef, onReady, onUnmount, onP
     }) as WaveSurferInstance;
     
     wsRef.current = wsWithRegions;
-    onReady(wsWithRegions);
+    
+    ws.on('ready', () => {
+      isInternalReady.current = true;
+      // Apply initial zoom if needed
+      if (zoom > 0) ws.zoom(zoom);
+      onReady(wsWithRegions);
+    });
 
     // Cleanup on unmount
     return () => {
+      isInternalReady.current = false;
       if (blobUrlRef.current) {
         URL.revokeObjectURL(blobUrlRef.current);
         blobUrlRef.current = null;
       }
       if (wsRef.current) {
         wsRef.current.destroy();
+        wsRef.current = null;
       }
       onUnmount();
     };
